@@ -2,10 +2,15 @@
 
 namespace MotoApp.Repositories
 {
-    public class GenericRepository<T> 
+    public class ListRepository<T> : IRepository<T>
         where T : class, IEntity, new()
     {
         protected readonly List<T> _items = new();
+
+        public IEnumerable<T> GetAll()
+        {
+            return _items.ToList();
+        }
 
         public T GetById(int id)
         {
@@ -18,13 +23,16 @@ namespace MotoApp.Repositories
             _items.Add(item);
         }
 
-        public void Save()
+        public void Remove(T item)
         {
-            foreach(var item in _items)
-            {
-                Console.WriteLine(item);
-            }
+            _items.Remove(item);
         }
 
+        public void Save()
+        {
+            // save is not required with list
+        }
+
+        
     }
 }
