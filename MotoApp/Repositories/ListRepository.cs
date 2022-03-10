@@ -32,7 +32,5 @@ namespace MotoApp.Repositories
         {
             // save is not required with list
         }
-
-        
     }
 }
