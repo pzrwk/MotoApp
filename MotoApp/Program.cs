@@ -25,18 +25,9 @@ static void AddEmployees(IRepository<BusinessPartner> businessPartnerRepository)
     //};
 
     //AddBatch(employeeRepository, employees);    // T = Employee 
-    AddBatch(businessPartnerRepository, businessPartners);    // T = BusinessPartner 
-}
+    //AddBatch(businessPartnerRepository, businessPartners);    // T = BusinessPartner 
 
-static void AddBatch<T>(IRepository<T> repository, T[] items)
-    where T: class, IEntity
-{
-    foreach (var item in items)
-    {
-        repository.Add(item);
-    }
-
-    repository.Save();
+    businessPartnerRepository.AddBatch(businessPartners);
 }
 
 static void WriteAllToConsole(IReadRepository<IEntity> repository)
