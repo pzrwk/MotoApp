@@ -1,20 +1,22 @@
-﻿using MotoApp;
-using MotoApp.Data;
+﻿using MotoApp.Data;
 using MotoApp.Entities;
 using MotoApp.Repositories;
 using MotoApp.Repositories.Extensions;
 
-var itemAdded = new ItemAdded<Employee>(EmployeeAdded);
+var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), EmployeeAdded);
+employeeRepository.ItemAdded += EmployeeRepositoryOnItemAdded;
 
-var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), itemAdded);
+void EmployeeRepositoryOnItemAdded(object? sender, Employee e)
+{
+    Console.WriteLine($"Employee added => {e.FirstName} from {sender?.GetType().Name}");
+}
 
 AddEmployees(employeeRepository);
 WriteAllToConsole(employeeRepository);
 
-static void EmployeeAdded(object item)
+static void EmployeeAdded(Employee item)
 {
-    var employee = (Employee)item;
-    Console.WriteLine($"{employee.FirstName} added.");
+    Console.WriteLine($"{item.FirstName} added.");
 }
 
 static void AddEmployees(IRepository<Employee> repository)
