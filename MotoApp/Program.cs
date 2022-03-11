@@ -2,32 +2,42 @@
 using MotoApp.Data;
 using MotoApp.Entities;
 using MotoApp.Repositories;
+using MotoApp.Repositories.Extensions;
 
-var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext());
+var itemAdded = new ItemAdded(EmployeeAdded);
+
+var employeeRepository = new SqlRepository<Employee>(new MotoAppDbContext(), itemAdded);
+
 AddEmployees(employeeRepository);
 WriteAllToConsole(employeeRepository);
 
-static void AddEmployees(IRepository<BusinessPartner> businessPartnerRepository)
+static void EmployeeAdded(object item)
+{
+    var employee = (Employee)item;
+    Console.WriteLine($"{employee.FirstName} added.");
+}
+
+static void AddEmployees(IRepository<Employee> repository)
 {
 
-    var businessPartners = new[]
-    {
-        new BusinessPartner { },
-        new BusinessPartner { },
-        new BusinessPartner { }
-    };
-
-    //var employees = new[]
+    //var businessPartners = new[]
     //{
-    //    new Employee { FirstName = "Adam" },
-    //    new Employee { FirstName = "Piotr" },
-    //    new Employee { FirstName = "Zuzanna" }
+    //    new BusinessPartner { },
+    //    new BusinessPartner { },
+    //    new BusinessPartner { }
     //};
+
+    var employees = new[]
+    {
+        new Employee { FirstName = "Adam" },
+        new Employee { FirstName = "Piotr" },
+        new Employee { FirstName = "Zuzanna" }
+    };
 
     //AddBatch(employeeRepository, employees);    // T = Employee 
     //AddBatch(businessPartnerRepository, businessPartners);    // T = BusinessPartner 
 
-    businessPartnerRepository.AddBatch(businessPartners);
+    repository.AddBatch(employees);
 }
 
 static void WriteAllToConsole(IReadRepository<IEntity> repository)

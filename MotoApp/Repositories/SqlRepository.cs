@@ -3,15 +3,19 @@ using MotoApp.Entities;
 
 namespace MotoApp.Repositories
 {
+    public delegate void ItemAdded(object item);
+
     internal class SqlRepository<T> : IRepository<T> where T : class, IEntity, new()
     {
         private readonly DbSet<T> _dbSet;
         private readonly DbContext _dbContext;
+        private readonly ItemAdded? _itemAddedCallback;
 
-        public SqlRepository(DbContext dbContext)
+        public SqlRepository(DbContext dbContext, ItemAdded? itemAddedCallback = null)
         {
             _dbContext = dbContext;
             _dbSet = _dbContext.Set<T>();
+            _itemAddedCallback = itemAddedCallback;
         }
 
         public IEnumerable<T> GetAll()
@@ -27,6 +31,7 @@ namespace MotoApp.Repositories
         public void Add(T item)
         {
             _dbSet.Add(item);
+            _itemAddedCallback?.Invoke(item);
         }
 
         public void Remove(T item)
