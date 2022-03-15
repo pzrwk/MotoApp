@@ -37,4 +37,8 @@ public interface ICarsProvider
     List<Car> TakeCars(Range range);
     List<Car> TakeCarsWhileNameStartsWith(string prefix);
 
+    // Skip
+
+    List<Car> SkipCars(int howMany);
+    List<Car> SkipCarsWhileNameStartsWith(string prefix);
 }

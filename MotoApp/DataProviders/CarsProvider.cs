@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using MotoApp.DataProviders.Extensions;
 using MotoApp.Entities;
 using MotoApp.Repositories;
@@ -173,6 +174,26 @@ public class CarsProvider : ICarsProvider
         return cars
             .OrderBy(x => x.Name)
             .TakeWhile(x => x.Name.StartsWith(prefix))
+            .ToList();
+    }
+
+    public List<Car> SkipCars(int howMany)
+    {
+        var cars = _carsRepository.GetAll();
+
+        return cars
+            .OrderBy(x => x.Name)
+            .Skip(howMany)
+            .ToList();
+    }
+
+    public List<Car> SkipCarsWhileNameStartsWith(string prefix)
+    {
+        var cars = _carsRepository.GetAll();
+
+        return cars
+            .OrderBy(x => x.Name)
+            .SkipWhile(x => x.Name.StartsWith(prefix))
             .ToList();
     }
 }
