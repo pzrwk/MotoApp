@@ -14,12 +14,34 @@ public class App : IApp
 
     public void Run()
     {
+        CreateXml();
+        QueryXml();
+    }
+
+    private void QueryXml()
+    {
+        var document = XDocument.Load("fuel.xml");
+
+        var names = document
+            .Element("Cars")?
+            .Elements("Car")
+            .Where(car => car.Attribute("Manufacturer")?.Value == "BMW")
+            .Select(car => car.Attribute("Name")?.Value);
+
+        foreach (var name in names)
+        {
+            Console.WriteLine(name);
+        }
+    }
+
+    private void CreateXml()
+    {
         var records = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
 
         //var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
 
         var document = new XDocument();
-        var cars = new XElement("Cars", records.Select(x => 
+        var cars = new XElement("Cars", records.Select(x =>
             new XElement("Car",
                 new XAttribute("Name", x.Name),
                 new XAttribute("Combined", x.Combined),
