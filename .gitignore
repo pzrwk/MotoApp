@@ -319,7 +319,7 @@ paket-files/
 __pycache__/
 *.pyc
 
-.idea
+.idea/
 
 # Cake - Uncomment if you are using it
 # tools/**
