@@ -1,4 +1,5 @@
-﻿using MotoApp.Components.CsvReader;
+﻿using System.Xml.Linq;
+using MotoApp.Components.CsvReader;
 
 namespace MotoApp;
 
@@ -13,29 +14,19 @@ public class App : IApp
 
     public void Run()
     {
-        var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+        var records = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
 
-        var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
+        //var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
 
-        var groups = manufacturers.GroupJoin(
-            cars,
-            manufacturer => manufacturer.Name,
-            car => car.Manufacturer,
-            (m, g) => new
-            {
-                Manufacturer = m,
-                Cars = g
-            })
-            .OrderBy(x => x.Manufacturer.Name);
+        var document = new XDocument();
+        var cars = new XElement("Cars", records.Select(x => 
+            new XElement("Car",
+                new XAttribute("Name", x.Name),
+                new XAttribute("Combined", x.Combined),
+                new XAttribute("Manufacturer", x.Manufacturer))
+        ));
 
-        foreach (var car in groups)
-        {
-            Console.WriteLine($"Manufacturer: {car.Manufacturer.Name}");
-            Console.WriteLine($"\t Cars: {car.Cars.Count()}");
-            Console.WriteLine($"\t Max {car.Cars.Max(x => x.Combined)}");
-            Console.WriteLine($"\t Min {car.Cars.Min(x => x.Combined)}");
-            Console.WriteLine($"\t Avg {car.Cars.Average(x => x.Combined)}");
-            Console.WriteLine();
-        }
+        document.Add(cars);
+        document.Save("fuel.xml");
     }
 }
