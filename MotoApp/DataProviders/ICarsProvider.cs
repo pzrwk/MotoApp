@@ -25,12 +25,16 @@ public interface ICarsProvider
 
     // first, last, single
     Car FirstByColor(string color);
-
     Car? FirstOrDefaultByColor(string color);
-
     Car FirstOrDefaultByColorWithDefault(string color);
     Car LastByColor(string color);
     Car SingleById(int id);
     Car? singleOrDefaultById(int id);
+
+    // Take
+
+    List<Car> TakeCars(int howMany);
+    List<Car> TakeCars(Range range);
+    List<Car> TakeCarsWhileNameStartsWith(string prefix);
 
 }
