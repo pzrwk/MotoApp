@@ -45,4 +45,8 @@ public interface ICarsProvider
     // Distinct
     List<string> DistinctAllColors();
     List<Car> DistinctByColors();
+
+    // Chunk
+
+    List<Car[]> ChunkCars(int size);
 }

@@ -216,4 +216,11 @@ public class CarsProvider : ICarsProvider
             .ToList();
 
     }
+
+    public List<Car[]> ChunkCars(int size)
+    {
+        var cars = _carsRepository.GetAll();
+
+        return cars.Chunk(size).ToList();
+    }
 }
