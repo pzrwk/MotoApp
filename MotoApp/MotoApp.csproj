@@ -14,7 +14,17 @@
 
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="DataProviders\Extensions\" />
+    <Folder Include="Components\CsvReader\Models\" />
+    <Folder Include="Components\CsvReader\Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Files\fuel.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\Files\manufacturers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

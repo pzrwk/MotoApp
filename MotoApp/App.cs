@@ -1,103 +1,54 @@
-﻿using MotoApp.DataProviders;
-using MotoApp.Entities;
-using MotoApp.Repositories;
+﻿using System.Xml.Linq;
+using MotoApp.Components.CsvReader;
 
 namespace MotoApp;
 
 public class App : IApp
 {
-    private readonly IRepository<Employee> _employeesRepository;
-    private readonly IRepository<Car> _carsRepository;
-    private readonly ICarsProvider _carsProvider;
+    private readonly ICsvReader _csvReader;
 
-    public App(
-        IRepository<Employee> employeesRepository,
-        IRepository<Car> carsRepository,
-        ICarsProvider carsProvider)
+    public App(ICsvReader csvReader)
     {
-        _employeesRepository = employeesRepository;
-        _carsRepository = carsRepository;
-        _carsProvider = carsProvider;
+        _csvReader = csvReader;
     }
 
     public void Run()
     {
-        Console.WriteLine("I'm here in Run() method");
-
-        var employees = new[]
-        {
-            new Employee {FirstName = "Adam"},
-            new Employee {FirstName = "Piotr"},
-            new Employee {FirstName = "Zuzanna"}
-        };
-
-        foreach (var employee in employees) _employeesRepository.Add(employee);
-
-        _employeesRepository.Save();
-
-        //reading
-
-        var items = _employeesRepository.GetAll();
-        foreach (var item in items) Console.WriteLine(item);
-
-        //cars
-        var cars = GenerateSampleCars();
-        foreach (var car in cars) _carsRepository.Add(car);
-
-        foreach(var car in _carsProvider.GetUniqueCarColors()) Console.WriteLine(car);
-
-        foreach (var car in _carsProvider.TakeCars(2..4)) Console.WriteLine(car);
+        CreateXml();
+        QueryXml();
     }
 
-    public static List<Car> GenerateSampleCars()
+    private void QueryXml()
     {
-        return new List<Car>
+        var document = XDocument.Load("fuel.xml");
+
+        var names = document
+            .Element("Cars")?
+            .Elements("Car")
+            .Where(car => car.Attribute("Manufacturer")?.Value == "BMW")
+            .Select(car => car.Attribute("Name")?.Value);
+
+        foreach (var name in names)
         {
-            new()
-            {
-                Id = 680,
-                Name = "Car 1",
-                Color = "Black",
-                StandardCost = 699.09M,
-                ListPrice = 1349.60M,
-                Type = "44"
-            },
-            new()
-            {
-                Id = 681,
-                Name = "Car 2",
-                Color = "Red",
-                StandardCost = 659.09M,
-                ListPrice = 1249.60M,
-                Type = "42"
-            },
-            new()
-            {
-                Id = 682,
-                Name = "Car 3",
-                Color = "Yellow",
-                StandardCost = 659.09M,
-                ListPrice = 1149.60M,
-                Type = "41"
-            },
-            new()
-            {
-                Id = 683,
-                Name = "Car 4",
-                Color = "Black",
-                StandardCost = 699.09M,
-                ListPrice = 1349.60M,
-                Type = "42"
-            },
-            new()
-            {
-                Id = 684,
-                Name = "Car 5",
-                Color = "Green",
-                StandardCost = 599.09M,
-                ListPrice = 1039.60M,
-                Type = "41"
-            }
-        };
+            Console.WriteLine(name);
+        }
+    }
+
+    private void CreateXml()
+    {
+        var records = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
+
+        //var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
+
+        var document = new XDocument();
+        var cars = new XElement("Cars", records.Select(x =>
+            new XElement("Car",
+                new XAttribute("Name", x.Name),
+                new XAttribute("Combined", x.Combined),
+                new XAttribute("Manufacturer", x.Manufacturer))
+        ));
+
+        document.Add(cars);
+        document.Save("fuel.xml");
     }
 }
