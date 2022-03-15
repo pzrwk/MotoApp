@@ -61,4 +61,34 @@ public class CarsProvider : ICarsProvider
 
         return sb.ToString();
     }
+
+    public List<Car> OrderByName()
+    {
+        var cars = _carsRepository.GetAll();
+        return cars.OrderBy(x => x.Name).ToList();
+    }
+
+    public List<Car> OrderByNameDescending()
+    {
+        var cars = _carsRepository.GetAll();
+        return cars.OrderByDescending(x => x.Name).ToList();
+    }
+
+    public List<Car> OrderByColorAndName()
+    {
+        var cars = _carsRepository.GetAll();
+        return cars
+            .OrderBy(x => x.Color)
+            .ThenBy(x => x.Name)
+            .ToList();
+    }
+
+    public List<Car> OrderByColorAndNameDesc()
+    {
+        var cars = _carsRepository.GetAll();
+        return cars
+            .OrderByDescending(x => x.Color)
+            .ThenByDescending(x => x.Name)
+            .ToList();
+    }
 }

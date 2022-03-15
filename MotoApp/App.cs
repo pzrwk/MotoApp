@@ -44,7 +44,7 @@ public class App : IApp
         var cars = GenerateSampleCars();
         foreach (var car in cars) _carsRepository.Add(car);
 
-        foreach(var car in _carsProvider.FilterCars(1000)) Console.WriteLine(car); 
+        foreach(var car in _carsProvider.GetUniqueCarColors()) Console.WriteLine(car); 
     }
 
     public static List<Car> GenerateSampleCars()
