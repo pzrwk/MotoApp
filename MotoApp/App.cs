@@ -1,7 +1,4 @@
 ﻿using MotoApp.Components.CsvReader;
-using MotoApp.Components.DataProviders;
-using MotoApp.Data.Entities;
-using MotoApp.Data.Repositories;
 
 namespace MotoApp;
 
@@ -19,5 +16,22 @@ public class App : IApp
         var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
 
         var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
+
+        var groups = cars
+            .GroupBy(x => x.Manufacturer)
+            .Select(g => new
+            {
+                Name = g.Key,
+                Max = g.Max(c => c.Combined),
+                Avg = g.Average(c => c.Combined)
+            })
+            .OrderBy(x => x.Avg);
+
+        foreach (var group in groups)
+        {
+            Console.WriteLine($"{group.Name}");
+            Console.WriteLine($"\tMax: {group.Max}");
+            Console.WriteLine($"\tAverage: {group.Avg}");
+        }
     }
 }
