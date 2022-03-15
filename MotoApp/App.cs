@@ -17,7 +17,7 @@ public class App : IApp
 
         var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
 
-        var groups = cars
+        /*var groups = cars
             .GroupBy(x => x.Manufacturer)
             .Select(g => new
             {
@@ -32,6 +32,26 @@ public class App : IApp
             Console.WriteLine($"{group.Name}");
             Console.WriteLine($"\tMax: {group.Max}");
             Console.WriteLine($"\tAverage: {group.Avg}");
+        }*/
+
+        var carsInCountry = cars.Join(
+                    manufacturers,
+                    x => x.Manufacturer,
+                    x => x.Name,
+                    (car, manufacturer) => new
+                    {
+                        manufacturer.Country,
+                        car.Name,
+                        car.Combined
+                    })
+                .OrderByDescending(x => x.Combined)
+                .ThenBy(x => x.Name);
+
+        foreach (var car in carsInCountry)
+        {
+            Console.WriteLine($"Country: {car.Country}");
+            Console.WriteLine($"\tName: {car.Name}");
+            Console.WriteLine($"\tCombined: {car.Combined}");
         }
     }
 }
