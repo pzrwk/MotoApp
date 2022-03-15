@@ -36,8 +36,8 @@ public class App : IApp
 
         var carsInCountry = cars.Join(
                     manufacturers,
-                    x => x.Manufacturer,
-                    x => x.Name,
+                    c => new { c.Manufacturer, c.Year },
+                    m => new { Manufacturer = m.Name, m.Year},
                     (car, manufacturer) => new
                     {
                         manufacturer.Country,
