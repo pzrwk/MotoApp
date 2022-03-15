@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Folder Include="bin\" />
-    <Folder Include="DataProviders\Extensions\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
-﻿using MotoApp.Entities;
+﻿using MotoApp.Data.Entities;
 
-namespace MotoApp.Repositories.Extensions
+namespace MotoApp.Data.Repositories.Extensions
 {
     internal static class RepositoryExtensions
     {
