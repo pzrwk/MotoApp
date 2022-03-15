@@ -1,8 +1,7 @@
-﻿using System;
-using System.Text;
-using MotoApp.DataProviders.Extensions;
+﻿using MotoApp.DataProviders.Extensions;
 using MotoApp.Entities;
 using MotoApp.Repositories;
+using System.Text;
 
 namespace MotoApp.DataProviders;
 
@@ -195,5 +194,26 @@ public class CarsProvider : ICarsProvider
             .OrderBy(x => x.Name)
             .SkipWhile(x => x.Name.StartsWith(prefix))
             .ToList();
+    }
+
+    public List<string> DistinctAllColors()
+    {
+        var cars = _carsRepository.GetAll();
+        return cars
+            .Select(x => x.Color)
+            .Distinct()
+            .OrderBy(c => c)
+            .ToList();
+    }
+
+    public List<Car> DistinctByColors()
+    {
+        var cars = _carsRepository.GetAll();
+
+        return cars
+            .DistinctBy(x => x.Color)
+            .OrderBy(x => x.Color)
+            .ToList();
+
     }
 }
