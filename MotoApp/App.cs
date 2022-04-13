@@ -22,8 +22,10 @@ public class App : IApp
         // ReadAllCarsFromDb();
         //ReadGroupedCarsFromDb();
         var cayman = this.ReadFirst("Cayman");
-        cayman.Name = "Mój samochód";
+        _motoAppDbContext.Cars.Remove(cayman);
         _motoAppDbContext.SaveChanges();
+        //cayman.Name = "Mój samochód";
+        //_motoAppDbContext.SaveChanges();
     }
 
     private Car? ReadFirst(string name)
