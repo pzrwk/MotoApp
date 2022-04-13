@@ -5,14 +5,11 @@ namespace MotoApp.Data
 {
     public class MotoAppDbContext : DbContext
     {
-        //public DbSet<Employee> Employees => Set<Employee>();
+        public MotoAppDbContext(DbContextOptions<MotoAppDbContext> options) : base(options)
+        {
 
-        //public DbSet<BusinessPartner> BusinessPartners => Set<BusinessPartner>();
+        }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    base.OnConfiguring(optionsBuilder);
-        //    optionsBuilder.UseInMemoryDatabase("StorageAppDb");
-        //}
+        public DbSet<Car> Cars { get; set; }
     }
 }

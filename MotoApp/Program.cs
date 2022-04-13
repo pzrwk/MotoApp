@@ -4,6 +4,8 @@ using MotoApp.Components.CsvReader;
 using MotoApp.Components.DataProviders;
 using MotoApp.Data.Entities;
 using MotoApp.Data.Repositories;
+using MotoApp.Data;
+using Microsoft.EntityFrameworkCore;
 
 var services = new ServiceCollection();
 services.AddSingleton<IApp, App>();
@@ -11,6 +13,8 @@ services.AddSingleton<IRepository<Employee>, ListRepository<Employee>>();
 services.AddSingleton<IRepository<Car>, ListRepository<Car>>();
 services.AddSingleton<ICarsProvider, CarsProvider>();
 services.AddSingleton<ICsvReader, CsvReader>();
+services.AddDbContext<MotoAppDbContext>(options => options
+.UseSqlServer("Data Source=PZRWK\\SQLEXPRESS;Initial Catalog=MotoAppStorage;Integrated Security=True"));
 
 var serviceProvider = services.BuildServiceProvider();
 var app = serviceProvider.GetService<IApp>()!;
