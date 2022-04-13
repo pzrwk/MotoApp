@@ -19,9 +19,47 @@ public class App : IApp
     public void Run()
     {
         // InsertData();
+        // ReadAllCarsFromDb();
+        //ReadGroupedCarsFromDb();
+        var cayman = this.ReadFirst("Cayman");
+        cayman.Name = "Mój samochód";
+        _motoAppDbContext.SaveChanges();
+    }
+
+    private Car? ReadFirst(string name)
+    {
+        return _motoAppDbContext.Cars.FirstOrDefault(c => c.Name == name);
+    }
+
+    private void ReadGroupedCarsFromDb()
+    {
+        var groups = _motoAppDbContext
+            .Cars
+            .GroupBy(x => x.Manufacturer)
+            .Select(x => new
+            {
+                Name = x.Key,
+                Cars = x.ToList()
+            })
+            .ToList();
+
+        foreach (var group in groups)
+        {
+            Console.WriteLine(group.Name);
+            Console.WriteLine("=========");
+            foreach(var car in group.Cars)
+            {
+                Console.WriteLine($"\t{car.Name}: {car.Combined}");
+            }
+            Console.WriteLine();
+        }
+    }
+
+    private void ReadAllCarsFromDb()
+    {
         var carsFromDb = _motoAppDbContext.Cars.ToList();
 
-        foreach(var carFromDb in carsFromDb)
+        foreach (var carFromDb in carsFromDb)
         {
             Console.WriteLine($"\t{carFromDb.Name}: {carFromDb.Combined}");
         }
