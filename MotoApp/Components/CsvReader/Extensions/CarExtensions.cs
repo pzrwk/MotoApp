@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using MotoApp.Components.CsvReader.Models;
+﻿using MotoApp.Components.CsvReader.Models;
+using System.Globalization;
 
 namespace MotoApp.Components.CsvReader.Extensions;
 

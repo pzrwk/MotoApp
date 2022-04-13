@@ -6,5 +6,5 @@ namespace MotoApp.Data.Repositories
         where T : class, IEntity
     {
 
-    } 
+    }
 }

@@ -1,54 +1,22 @@
-﻿using System.Xml.Linq;
-using MotoApp.Components.CsvReader;
+﻿using MotoApp.Components.CsvReader;
+using MotoApp.Data;
 
 namespace MotoApp;
 
 public class App : IApp
 {
     private readonly ICsvReader _csvReader;
+    private readonly MotoAppDbContext _motoAppDbContext;
 
-    public App(ICsvReader csvReader)
+    public App(ICsvReader csvReader, MotoAppDbContext motoAppDbContext)
     {
         _csvReader = csvReader;
+        _motoAppDbContext = motoAppDbContext;
+        _motoAppDbContext.Database.EnsureCreated();
     }
 
     public void Run()
     {
-        CreateXml();
-        QueryXml();
-    }
-
-    private void QueryXml()
-    {
-        var document = XDocument.Load("fuel.xml");
-
-        var names = document
-            .Element("Cars")?
-            .Elements("Car")
-            .Where(car => car.Attribute("Manufacturer")?.Value == "BMW")
-            .Select(car => car.Attribute("Name")?.Value);
-
-        foreach (var name in names)
-        {
-            Console.WriteLine(name);
-        }
-    }
-
-    private void CreateXml()
-    {
-        var records = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
-
-        //var manufacturers = _csvReader.ProcessManufacturers("Resources\\Files\\manufacturers.csv");
-
-        var document = new XDocument();
-        var cars = new XElement("Cars", records.Select(x =>
-            new XElement("Car",
-                new XAttribute("Name", x.Name),
-                new XAttribute("Combined", x.Combined),
-                new XAttribute("Manufacturer", x.Manufacturer))
-        ));
-
-        document.Add(cars);
-        document.Save("fuel.xml");
+        var cars = _csvReader.ProcessCars("Resources\\Files\\fuel.csv");
     }
 }
