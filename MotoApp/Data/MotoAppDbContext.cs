@@ -11,5 +11,8 @@ namespace MotoApp.Data
         }
 
         public DbSet<Car> Cars { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.LogTo(Console.WriteLine);
     }
 }

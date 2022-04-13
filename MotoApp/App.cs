@@ -20,10 +20,10 @@ public class App : IApp
     {
         // InsertData();
         // ReadAllCarsFromDb();
-        //ReadGroupedCarsFromDb();
-        var cayman = this.ReadFirst("Cayman");
-        _motoAppDbContext.Cars.Remove(cayman);
-        _motoAppDbContext.SaveChanges();
+        ReadGroupedCarsFromDb();
+        //var cayman = this.ReadFirst("Cayman");
+        //_motoAppDbContext.Cars.Remove(cayman);
+        //_motoAppDbContext.SaveChanges();
         //cayman.Name = "Mój samochód";
         //_motoAppDbContext.SaveChanges();
     }
